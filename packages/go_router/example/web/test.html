@@ -1,0 +1,25 @@
+<!doctype html>
+<script>
+    window.onload = function () {
+        fetch("http://localhost:8080/")
+            .then((response) => response.text())
+            .then((html) => {
+                console.log("HTML loaded:", html);
+                const container = document.getElementById(
+                    "custom-html-container",
+                );
+                container.innerHTML = html;
+            })
+            .catch((error) => {
+                console.error("Error fetching HTML:", error);
+                document.getElementById("custom-html-container").innerHTML =
+                    "<p>Error loading custom HTML</p>";
+            });
+    };
+</script>
+<html>
+    <body>
+        <h1>Test</h1>
+        <div id="custom-html-container"></div>
+    </body>
+</html>

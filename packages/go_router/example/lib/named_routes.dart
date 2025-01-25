@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:go_router/go_router.dart';
 
 // This scenario demonstrates how to navigate using named locations instead of
@@ -54,7 +55,10 @@ const Map<String, Family> _families = <String, Family>{
   ),
 };
 
-void main() => runApp(App());
+void main() {
+  setUrlStrategy(PathUrlStrategy());
+  runApp(App());
+}
 
 /// The main app.
 class App extends StatelessWidget {
