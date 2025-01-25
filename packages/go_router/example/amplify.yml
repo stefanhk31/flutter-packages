@@ -14,6 +14,7 @@ applications:
             - echo "Installing Very Good CLI"
             - dart pub global activate very_good_cli
             - echo "Installing dependencies"
+            - echo $PWD
             - cd packages/go_router/example/
             - dart pub global run very_good_cli:very_good packages get -r
         build:
