@@ -25,7 +25,7 @@ applications:
             - dart pub global run dart_frog_cli:dart_frog build
             - echo "Compiling .exe file"
             - dart compile exe build/bin/server.dart -o build/bin/server
-            - ./build/bin/server.exe
+            - dart run build/bin/server.dart
 
       artifacts:
         baseDirectory: build/bin/server
