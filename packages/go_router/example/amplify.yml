@@ -1,7 +1,7 @@
 version: 1.0
 applications:
   - appRoot: packages/go_router/example
-    frontend:
+    backend:
       phases:
         preBuild:
           commands:
@@ -13,6 +13,21 @@ applications:
             - flutter config --no-analytics
             - echo "Installing Very Good CLI"
             - dart pub global activate very_good_cli
+            - echo "Installing dependencies"
+            - echo $PWD
+            - cd flutter-packages/packages/go_router/example/api
+            - dart pub global run very_good_cli:very_good packages get -r
+        build:
+          commands:
+            - echo "Building Dart Frog server"
+            - dart pub global run dart_frog_cli:dart_frog build
+            - echo "Compiling .exe file"
+            - dart compile exe build/bin/server.dart -o build/bin/server
+            - dart run build/bin/server.dart
+    frontend:
+      phases:
+        preBuild:
+          commands:
             - echo "Installing dependencies"
             - echo $PWD
             - cd flutter-packages/packages/go_router/example/
