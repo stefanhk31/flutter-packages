@@ -1,0 +1,36 @@
+version: 1.0
+applications:
+  - appRoot: packages/go_router/example/api
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - echo $PWD
+            - cd ../../../../../
+            - echo "Installing Flutter SDK"
+            - git clone https://github.com/flutter/flutter.git -b stable --depth 1
+            - export PATH="$PATH:$(pwd)/flutter/bin"
+            - flutter config --no-analytics
+            - echo "Installing Dart Frog"
+            - dart pub global activate dart_frog_cli
+            - echo "Installing Very Good CLI"
+            - dart pub global activate very_good_cli
+            - echo "Installing dependencies"
+            - echo $PWD
+            - cd flutter-packages/packages/go_router/example/api
+            - dart pub global run very_good_cli:very_good packages get -r
+        build:
+          commands:
+            - echo "Building Dart Frog server"
+            - dart_frog build
+            - echo "Compiling .exe file"
+            - dart compile exe build/bin/server.dart -o build/bin/server
+            - ./build/bin/server.exe
+
+      artifacts:
+        baseDirectory: build/web
+        files:
+          - "**/*"
+      cache:
+        paths:
+          - flutter/.pub-cache
