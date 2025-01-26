@@ -1,7 +1,7 @@
 version: 1.0
 applications:
   - appRoot: packages/go_router/example/api
-    frontend:
+    backend:
       phases:
         preBuild:
           commands:
@@ -22,15 +22,15 @@ applications:
         build:
           commands:
             - echo "Building Dart Frog server"
-            - dart_frog build
+            - dart pub global run dart_frog_cli:dart_frog build
             - echo "Compiling .exe file"
             - dart compile exe build/bin/server.dart -o build/bin/server
             - ./build/bin/server.exe
 
       artifacts:
-        baseDirectory: build/web
+        baseDirectory: build/bin/server
         files:
           - "**/*"
       cache:
         paths:
-          - flutter/.pub-cache
+          - dart/.pub-cache
