@@ -1,7 +1,7 @@
 version: 1.0
 applications:
   - appRoot: packages/go_router/example/api
-    backend:
+    frontend:
       phases:
         preBuild:
           commands:
