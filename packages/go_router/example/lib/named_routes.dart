@@ -84,23 +84,23 @@ class App extends StatelessWidget {
         builder: (BuildContext context, GoRouterState state) =>
             const HomeScreen(),
         routes: <GoRoute>[
-          GoRoute(
-            name: 'family',
-            path: 'family/:fid',
-            builder: (BuildContext context, GoRouterState state) =>
-                FamilyScreen(fid: state.pathParameters['fid']!),
-            routes: <GoRoute>[
-              GoRoute(
-                name: 'person',
-                path: 'person/:pid',
-                builder: (BuildContext context, GoRouterState state) {
-                  return PersonScreen(
-                      fid: state.pathParameters['fid']!,
-                      pid: state.pathParameters['pid']!);
-                },
-              ),
-            ],
-          ),
+          // GoRoute(
+          //   name: 'family',
+          //   path: 'family/:fid',
+          //   builder: (BuildContext context, GoRouterState state) =>
+          //       FamilyScreen(fid: state.pathParameters['fid']!),
+          //   routes: <GoRoute>[
+          //     GoRoute(
+          //       name: 'person',
+          //       path: 'person/:pid',
+          //       builder: (BuildContext context, GoRouterState state) {
+          //         return PersonScreen(
+          //             fid: state.pathParameters['fid']!,
+          //             pid: state.pathParameters['pid']!);
+          //       },
+          //     ),
+          //   ],
+          // ),
         ],
       ),
     ],
