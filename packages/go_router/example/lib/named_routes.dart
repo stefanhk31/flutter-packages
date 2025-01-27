@@ -53,10 +53,12 @@ class App extends StatelessWidget {
             const HomeScreen(),
         routes: <GoRoute>[
           GoRoute(
+              name: 'family',
               path: 'family/:fid',
               redirect: (context, state) {
                 window.location.href =
                     'https://feat-multi-html-page-ex.dwutfyggvgzri.amplifyapp.com/test.html';
+                return null;
               })
         ],
       ),
