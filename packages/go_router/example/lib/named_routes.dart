@@ -2,6 +2,8 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:go_router/go_router.dart';
@@ -14,28 +16,9 @@ import 'package:go_router/go_router.dart';
 // then be used in context.namedLocation to be translate back to the actual URL
 // location.
 
-/// Family data class.
-class Family {
-  /// Create a family.
-  const Family({required this.name, required this.people});
-
-  /// The last name of the family.
-  final String name;
-
-  /// The people in the family.
-  final Map<String, Person> people;
-}
-
-/// Person data class.
-class Person {
-  /// Creates a person.
-  const Person({required this.name, required this.age});
-
-  /// The first name of the person.
-  final String name;
-
-  /// The age of the person.
-  final int age;
+void main() {
+  setUrlStrategy(PathUrlStrategy());
+  runApp(App());
 }
 
 const Map<String, Family> _families = <String, Family>{
@@ -55,25 +38,10 @@ const Map<String, Family> _families = <String, Family>{
   ),
 };
 
-void main() {
-  setUrlStrategy(PathUrlStrategy());
-  runApp(App());
-}
-
 /// The main app.
 class App extends StatelessWidget {
-  /// Creates an [App].
-  App({super.key});
-
   /// The title of the app.
   static const String title = 'GoRouter Example: Named Routes';
-
-  @override
-  Widget build(BuildContext context) => MaterialApp.router(
-        routerConfig: _router,
-        title: title,
-        debugShowCheckedModeBanner: false,
-      );
 
   late final GoRouter _router = GoRouter(
     debugLogDiagnostics: true,
@@ -84,27 +52,68 @@ class App extends StatelessWidget {
         builder: (BuildContext context, GoRouterState state) =>
             const HomeScreen(),
         routes: <GoRoute>[
-          // GoRoute(
-          //   name: 'family',
-          //   path: 'family/:fid',
-          //   builder: (BuildContext context, GoRouterState state) =>
-          //       FamilyScreen(fid: state.pathParameters['fid']!),
-          //   routes: <GoRoute>[
-          //     GoRoute(
-          //       name: 'person',
-          //       path: 'person/:pid',
-          //       builder: (BuildContext context, GoRouterState state) {
-          //         return PersonScreen(
-          //             fid: state.pathParameters['fid']!,
-          //             pid: state.pathParameters['pid']!);
-          //       },
-          //     ),
-          //   ],
-          // ),
+          GoRoute(
+              path: 'family/:fid',
+              redirect: (context, state) {
+                window.location.href =
+                    'https://feat-multi-html-page-ex.dwutfyggvgzri.amplifyapp.com/test.html';
+              })
         ],
       ),
     ],
   );
+
+  /// Creates an [App].
+  App({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp.router(
+        routerConfig: _router,
+        title: title,
+        debugShowCheckedModeBanner: false,
+      );
+}
+
+/// Family data class.
+class Family {
+  /// The last name of the family.
+  final String name;
+
+  /// The people in the family.
+  final Map<String, Person> people;
+
+  /// Create a family.
+  const Family({required this.name, required this.people});
+}
+
+/// The screen that shows a list of persons in a family.
+class FamilyScreen extends StatelessWidget {
+  /// The id family to display.
+  final String fid;
+
+  /// Creates a [FamilyScreen].
+  const FamilyScreen({required this.fid, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final Map<String, Person> people = _families[fid]!.people;
+    return Scaffold(
+      appBar: AppBar(title: Text(_families[fid]!.name)),
+      body: ListView(
+        children: <Widget>[
+          for (final MapEntry<String, Person> entry in people.entries)
+            ListTile(
+              title: Text(entry.value.name),
+              onTap: () => context.go(context.namedLocation(
+                'person',
+                pathParameters: <String, String>{'fid': fid, 'pid': entry.key},
+                queryParameters: <String, String>{'qid': 'quid'},
+              )),
+            ),
+        ],
+      ),
+    );
+  }
 }
 
 /// The home screen that shows a list of families.
@@ -132,46 +141,28 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-/// The screen that shows a list of persons in a family.
-class FamilyScreen extends StatelessWidget {
-  /// Creates a [FamilyScreen].
-  const FamilyScreen({required this.fid, super.key});
+/// Person data class.
+class Person {
+  /// The first name of the person.
+  final String name;
 
-  /// The id family to display.
-  final String fid;
+  /// The age of the person.
+  final int age;
 
-  @override
-  Widget build(BuildContext context) {
-    final Map<String, Person> people = _families[fid]!.people;
-    return Scaffold(
-      appBar: AppBar(title: Text(_families[fid]!.name)),
-      body: ListView(
-        children: <Widget>[
-          for (final MapEntry<String, Person> entry in people.entries)
-            ListTile(
-              title: Text(entry.value.name),
-              onTap: () => context.go(context.namedLocation(
-                'person',
-                pathParameters: <String, String>{'fid': fid, 'pid': entry.key},
-                queryParameters: <String, String>{'qid': 'quid'},
-              )),
-            ),
-        ],
-      ),
-    );
-  }
+  /// Creates a person.
+  const Person({required this.name, required this.age});
 }
 
 /// The person screen.
 class PersonScreen extends StatelessWidget {
-  /// Creates a [PersonScreen].
-  const PersonScreen({required this.fid, required this.pid, super.key});
-
   /// The id of family this person belong to.
   final String fid;
 
   /// The id of the person to be displayed.
   final String pid;
+
+  /// Creates a [PersonScreen].
+  const PersonScreen({required this.fid, required this.pid, super.key});
 
   @override
   Widget build(BuildContext context) {
